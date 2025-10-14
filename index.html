@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create Account - Crazy Time</title>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -15,6 +18,7 @@
       justify-content: center;
       align-items: center;
     }
+
     .container {
       background-color: white;
       border-radius: 20px;
@@ -24,32 +28,52 @@
       overflow: hidden;
       width: 100%;
     }
+
     .left {
       background: url('https://source.unsplash.com/500x600/?technology,fun') no-repeat center center/cover;
       flex: 1;
       display: none;
     }
+
     .right {
       flex: 1;
       padding: 40px;
     }
+
     .right h1 { text-align: center; margin-bottom: 30px; color: #333; }
-    .input-group { position: relative; margin-bottom: 20px; }
-    .input-group input {
-      width: 100%;
-      padding: 12px 40px 12px 40px;
+
+    .input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
+      padding: 10px 12px;
       border-radius: 10px;
+      background-color: #fff;
+    }
+
+    .input-group i.fas {
+      color: #888;
+      margin-right: 10px;
       font-size: 16px;
     }
-    .input-group i {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #aaa;
+
+    .input-group input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background-color: transparent;
     }
-    .input-group .toggle { right: 10px; left: auto; cursor: pointer; }
+
+    .input-group .toggle {
+      color: #888;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 10px;
+    }
+
     button {
       width: 100%;
       padding: 14px;
@@ -62,214 +86,113 @@
       cursor: pointer;
       transition: background 0.3s;
     }
+
     button:hover {
       background: linear-gradient(to right, #43e97b, #38f9d7);
     }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
     @media (min-width: 768px) {
       .left { display: block; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="left"></div>
     <div class="right">
       <h1>Welcome to Crazy Time 🎉</h1>
-      <form action="index.html" method="POST" onsubmit="return validatePassword()">
+
+      <form onsubmit="return validateForm()">
         <div class="input-group">
           <i class="fas fa-user"></i>
-          <input type="text" name="first_name" placeholder="First Name" required />
+          <input type="text" id="first_name" name="first_name" placeholder="First Name" required />
         </div>
+
         <div class="input-group">
           <i class="fas fa-user"></i>
-          <input type="text" name="last_name" placeholder="Last Name" required />
+          <input type="text" id="last_name" name="last_name" placeholder="Last Name" required />
         </div>
-        
-<!-- Add this in your <head> for Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-<style>
-  .input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    padding: 10px 12px;
-    border-radius: 6px;
-    background-color: #fff;
-  }
+        <div class="input-group">
+          <i class="fas fa-phone"></i>
+          <input type="tel" id="phone" name="phone" placeholder="Phone number (e.g. +1234567890)" required />
+        </div>
 
-  .input-group i.fas {
-    color: #888;
-    margin-right: 10px;
-    font-size: 16px;
-  }
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" name="password" placeholder="Password" required />
+          <i class="fas fa-eye toggle" onclick="togglePassword('password', this)"></i>
+        </div>
 
-  .input-group input {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background-color: transparent;
-  }
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required />
+          <i class="fas fa-eye toggle" onclick="togglePassword('confirm_password', this)"></i>
+        </div>
 
-  .input-group .toggle {
-    color: #888;
-    cursor: pointer;
-    font-size: 16px;
-    margin-left: 10px;
-  }
+        <div id="error-message" class="error-message"></div>
 
-  .create-account-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: bold;
-    font-size: 16px;
-    color: #fff;
-    background-color: #0066cc;
-    padding: 10px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
-
-  .create-account-link:hover {
-    background-color: #004c99;
-  }
-
-  .error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: -15px;
-    margin-bottom: 15px;
-    display: none;
-  }
-</style>
-
-<!-- HTML Content -->
-<div class="input-group">
-  <i class="fas fa-phone"></i>
-  <input
-    type="tel"
-    id="phone"
-    name="phone"
-    placeholder="Phone number (e.g. +1234567890)"
-    required
-  />
-</div>
-
-<div class="input-group">
-  <i class="fas fa-lock"></i>
-  <input
-    type="password"
-    id="password"
-    name="password"
-    placeholder="Password"
-    required
-  />
-  <i class="fas fa-eye toggle" onclick="togglePassword('password', this)"></i>
-</div>
-
-<div class="input-group">
-  <i class="fas fa-lock"></i>
-  <input
-    type="password"
-    id="confirm_password"
-    name="confirm_password"
-    placeholder="Confirm Password"
-    required
-  />
-  <i class="fas fa-eye toggle" onclick="togglePassword('confirm_password', this)"></i>
-</div>
-
-<div id="error-message" class="error-message"></div>
-
-<a
-  href="#"
-  class="create-account-link"
-  onclick="handleCreateAccount(event)"
->
-  <i class="fas fa-user-plus"></i> Create Account
-</a>
-
-<!-- JS Scripts -->
-<script>
-  function togglePassword(inputId, iconElement) {
-    const input = document.getElementById(inputId);
-    const isPassword = input.type === 'password';
-    input.type = isPassword ? 'text' : 'password';
-    iconElement.classList.toggle('fa-eye');
-    iconElement.classList.toggle('fa-eye-slash');
-  }
-
-  function isValidPhoneNumber(phone) {
-    // Simple regex for international phone number (starts with + and 9-15 digits)
-    const phoneRegex = /^\+\d{9,15}$/;
-    return phoneRegex.test(phone);
-  }
-
-  function handleCreateAccount(event) {
-    const phone = document.getElementById('phone').value.trim();
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirm_password').value;
-    const errorMessage = document.getElementById('error-message');
-
-    errorMessage.style.display = 'none';
-    errorMessage.innerText = '';
-
-    if (!isValidPhoneNumber(phone)) {
-      event.preventDefault();
-      errorMessage.innerText = 'Please enter a valid phone number starting with + and digits only.';
-      errorMessage.style.display = 'block';
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      event.preventDefault();
-      errorMessage.innerText = 'Passwords do not match.';
-      errorMessage.style.display = 'block';
-      return;
-    }
-
-    // Passed validation – redirect
-    window.location.href = 'https://hobbies-flame.vercel.app/';
-  }
-</script>
+        <button type="submit">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
       </form>
     </div>
   </div>
 
   <script>
-    function togglePassword(id, icon) {
-      const input = document.getElementById(id);
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
+    // Toggle password visibility
+    function togglePassword(inputId, iconElement) {
+      const input = document.getElementById(inputId);
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      iconElement.classList.toggle('fa-eye');
+      iconElement.classList.toggle('fa-eye-slash');
     }
 
-    function validatePassword() {
-      const pass = document.getElementById('password').value;
-      const confirm = document.getElementById('confirm_password').value;
+    // Form validation
+    function validateForm() {
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirm_password').value;
+      const errorMessage = document.getElementById('error-message');
 
+      errorMessage.style.display = 'none';
+      errorMessage.innerText = '';
+
+      // Validate phone number format (+ and 9-15 digits)
+      const phoneRegex = /^\+\d{9,15}$/;
+      if (!phoneRegex.test(phone)) {
+        errorMessage.innerText = 'Please enter a valid phone number starting with + and digits only.';
+        errorMessage.style.display = 'block';
+        return false;
+      }
+
+      // Strong password check (min 8 chars, uppercase, lowercase, number, special char)
       const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!strong.test(password)) {
+        errorMessage.innerText = 'Password must include uppercase, lowercase, number, symbol and be at least 8 characters long.';
+        errorMessage.style.display = 'block';
+        return false;
+      }
 
-      if (!strong.test(pass)) {
-        alert('Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.');
+      // Password match check
+      if (password !== confirmPassword) {
+        errorMessage.innerText = 'Passwords do not match.';
+        errorMessage.style.display = 'block';
         return false;
       }
-      if (pass !== confirm) {
-        alert('Passwords do not match.');
-        return false;
-      }
-      return true;
+
+      // ✅ Passed all validation — redirect
+      window.location.href = 'https://hobbies-flame.vercel.app/';
+      return false; // Prevent default form submit
     }
   </script>
 </body>
